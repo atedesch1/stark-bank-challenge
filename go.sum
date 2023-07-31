@@ -8,8 +8,6 @@ github.com/mvrilo/go-cpf v0.0.0-20150109121854-4113d38c8d21 h1:YPCOJF8DBm+WyORRx
 github.com/mvrilo/go-cpf v0.0.0-20150109121854-4113d38c8d21/go.mod h1:yYdoTli5ejfoOkQX4/hP97HEoULZBMTRhiD0p9UM/oc=
 github.com/robfig/cron v1.2.0 h1:ZjScXvvxeQ63Dbyxy76Fj3AT3Ut0aKsyd2/tl3DTMuQ=
 github.com/robfig/cron v1.2.0/go.mod h1:JGuDeoQd7Z6yL4zQhZ3OPEVHB7fL6Ka6skscFHfmt2k=
-github.com/robfig/cron/v3 v3.0.1 h1:WdRxkvbJztn8LMz/QEvLN5sBU+xKpSqwwUO1Pjr4qDs=
-github.com/robfig/cron/v3 v3.0.1/go.mod h1:eQICP3HwyT7UooqI/z+Ov+PtYAWygg1TEWWzGIFLtro=
 github.com/starkbank/ecdsa-go/v2 v2.0.0 h1:M8G8M+azTlslvMYHk71OiRrxpZHhM/fNLy+n2SEKT1E=
 github.com/starkbank/ecdsa-go/v2 v2.0.0/go.mod h1:NpEPAoZotqZ07mL2DnHm0ADSWZ3ujn6rSXN33oeAkj4=
 github.com/starkbank/sdk-go v0.3.0 h1:DRYQ0IS1tuDVjT8cdbhUI4OFm8GOr5eJZVGr2KzJ9vA=

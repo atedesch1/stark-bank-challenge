@@ -38,7 +38,7 @@ func main() {
 	}
 
 	// run webhook listener on go routine
-	serveWebHookServer()
+	go serveWebHookServer()
 
 	// run cron job on this go routine for 24hrs
 	c := cron.New()
@@ -50,8 +50,7 @@ func main() {
 
 func serveWebHookServer() {
 	http.HandleFunc("/invoicehook", invoiceHookHandler)
-	err := http.ListenAndServe(":8080", nil)
-	if err != nil {
+	if err := http.ListenAndServe(":8080", nil); err != nil {
 		panic(fmt.Sprintln("Error starting the server: ", err))
 	}
 }
