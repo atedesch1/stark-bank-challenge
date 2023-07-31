@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"net/http"
 	"os"
 	"time"
@@ -61,6 +62,24 @@ func invoiceHookHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	body, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		http.Error(w, "Error reading request body", http.StatusInternalServerError)
+		return
+	}
+	defer r.Body.Close()
+	reqBody := string(body)
+
+	err = verifyDigitalSignature(r.Header, reqBody)
+	if err != nil {
+		http.Error(
+			w,
+			fmt.Sprintln("Could not verify digital signature: ", err.Error()),
+			http.StatusBadRequest,
+		)
+		return
+	}
+
 	type requestBody struct {
 		Event struct {
 			Subscription string `json:"subscription"`
@@ -73,22 +92,27 @@ func invoiceHookHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var req requestBody
-
-	err := json.NewDecoder(r.Body).Decode(&req)
+	err = json.NewDecoder(r.Body).Decode(&req)
 	if err != nil {
-		http.Error(w, "Invalid request payload", http.StatusBadRequest)
+		http.Error(
+			w,
+			fmt.Sprintln("Invalid request payload: ", err.Error()),
+			http.StatusBadRequest,
+		)
 		return
 	}
 
-	if req.Event.Subscription != "invoice" {
+	event := req.Event
+
+	if event.Subscription != "invoice" {
 		http.Error(w, "Invalid subscription", http.StatusBadRequest)
 		return
-	} else if req.Event.Log.Invoice.Amount <= 0 {
+	} else if event.Log.Invoice.Amount <= 0 {
 		http.Error(w, "Amount from invoice should be positive", http.StatusBadRequest)
 		return
 	}
 
-	transferAmountToStarkBank(req.Event.Log.Invoice.Amount)
+	transferAmountToStarkBank(event.Log.Invoice.Amount)
 
 	w.WriteHeader(http.StatusOK)
 	fmt.Fprintln(w, "Transfer concluded")
