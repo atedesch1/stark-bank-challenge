@@ -3,7 +3,6 @@ package main
 import (
 	"encoding/json"
 	"errors"
-	"log"
 	"net/http"
 
 	"github.com/starkbank/ecdsa-go/v2/ellipticcurve/ecdsa"
@@ -12,15 +11,12 @@ import (
 )
 
 func verifyDigitalSignature(digitalSignature string, message string) error {
-	log.Println("signature in base64", digitalSignature)
 	signature := signature.FromBase64(digitalSignature)
-	log.Println("signature from base64", signature)
 
 	publicKey, err := getStarkPublicKey()
 	if err != nil {
 		return err
 	}
-	log.Println("publicKey", publicKey)
 
 	pk := publickey.FromPem(publicKey)
 
