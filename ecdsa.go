@@ -3,7 +3,7 @@ package main
 import (
 	"encoding/json"
 	"errors"
-	"fmt"
+	"log"
 	"net/http"
 
 	"github.com/starkbank/ecdsa-go/v2/ellipticcurve/ecdsa"
@@ -11,18 +11,16 @@ import (
 	"github.com/starkbank/ecdsa-go/v2/ellipticcurve/signature"
 )
 
-func verifyDigitalSignature(header http.Header, message string) error {
-	digitalSignature, ok := header["Digital-Signature"]
-	if !ok || len(digitalSignature) == 0 {
-		return errors.New("no digital signature found")
-	}
-
-	signature := signature.FromBase64(digitalSignature[0])
+func verifyDigitalSignature(digitalSignature string, message string) error {
+	log.Println("signature in base64", digitalSignature)
+	signature := signature.FromBase64(digitalSignature)
+	log.Println("signature from base64", signature)
 
 	publicKey, err := getStarkPublicKey()
 	if err != nil {
 		return err
 	}
+	log.Println("publicKey", publicKey)
 
 	pk := publickey.FromPem(publicKey)
 
@@ -57,7 +55,7 @@ func getStarkPublicKey() (string, error) {
 	}
 
 	if len(res.PublicKeys) == 0 {
-		return "", fmt.Errorf("No public keys were found")
+		return "", errors.New("No public keys were found")
 	}
 	return res.PublicKeys[0].Content, nil
 }

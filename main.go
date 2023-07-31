@@ -70,7 +70,13 @@ func invoiceHookHandler(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
 	reqBody := string(body)
 
-	err = verifyDigitalSignature(r.Header, reqBody)
+	digitalSignature, ok := r.Header["Digital-Signature"]
+	if !ok || len(digitalSignature) == 0 {
+		http.Error(w, "No digital signature found", http.StatusBadRequest)
+		return
+	}
+
+	err = verifyDigitalSignature(digitalSignature[0], reqBody)
 	if err != nil {
 		http.Error(
 			w,
@@ -92,7 +98,7 @@ func invoiceHookHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var req requestBody
-	err = json.NewDecoder(r.Body).Decode(&req)
+	err = json.Unmarshal(body, &req)
 	if err != nil {
 		http.Error(
 			w,
