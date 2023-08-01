@@ -34,6 +34,6 @@ func transferAmountToStarkBank(amount int) {
 	fmt.Printf(
 		"Tranfered %d to Stark Bank at: %v\n",
 		amount,
-		time.Now().Format("0000-00-00 00:00:00"),
+		time.Now().Format("2000-01-01 01:01:01"),
 	)
 }
