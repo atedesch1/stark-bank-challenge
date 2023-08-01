@@ -14,6 +14,10 @@ import (
 	"github.com/starkinfra/core-go/starkcore/user/project"
 )
 
+const (
+	everyThirdHourCronString = "0 */3 * * *"
+)
+
 func setupIntegration() error {
 	if os.Getenv("ENVIRONMENT") == "dev" {
 		err := godotenv.Load()
@@ -43,7 +47,7 @@ func main() {
 
 	// run cron job on this go routine for 24hrs
 	c := cron.New()
-	c.AddFunc("0 */3 * * *", issueInvoices)
+	c.AddFunc(everyThirdHourCronString, issueInvoices)
 	c.Start()
 	time.Sleep(24 * time.Hour)
 	c.Stop()
