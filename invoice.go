@@ -33,7 +33,7 @@ func issueInvoices() {
 	fmt.Printf(
 		"Issued %d invoices at: %v\n",
 		numberOfInvoices,
-		time.Now().Format("2000-01-01 01:01:01"),
+		time.Now().Format("2006-01-02 15:04:05"),
 	)
 }
 
